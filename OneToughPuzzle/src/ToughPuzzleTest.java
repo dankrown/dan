@@ -4,13 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 
+public class ToughPuzzleTest {
 
-public class ToughPuzzle5Test {
-
-	ToughPuzzle5 puzzle;
+	ToughPuzzle puzzle;
+	
 	@Before
 	public void setUp() throws Exception {
-		puzzle = new ToughPuzzle5();
+		puzzle = new ToughPuzzle();
 	}
 	
 	private void assertPieceIsRotated(PuzzlePiece puzzlePiece, int orientation) {
@@ -145,27 +145,83 @@ public class ToughPuzzle5Test {
 	}
 	
 	@Test
-	public void testCheckPosition0() {
+	public void testCheckPosition0ForValidPieces() {
 
-		fail("Not yet implemented");
+		PuzzlePiece piece0 = puzzle.piece[0]; //East side is an internal spade, and the South side is an internal heart, 
+		PuzzlePiece piece1 = puzzle.piece[2]; //West side is an external spade (should fit)
+		PuzzlePiece piece2 = puzzle.piece[4]; //North side is an external heart (should fit)
+		assertTrue(puzzle.checkPosition0(piece0, piece1, piece2));
 	}
 
 	@Test
-	public void testCheckPosition1() {
+	public void testCheckPosition0ForInvalidPieces1() {
 
-		fail("Not yet implemented");
+		PuzzlePiece piece0 = puzzle.piece[0]; //East side is an internal spade, and the South side is an internal heart, 
+		PuzzlePiece piece1 = puzzle.piece[2]; //West side is an external spade (should fit)
+		PuzzlePiece piece2 = puzzle.piece[5]; //North side is an external club (should not fit)
+		assertFalse(puzzle.checkPosition0(piece0, piece1, piece2));
+	}
+	
+	@Test
+	public void testCheckPosition0ForInvalidPieces2() {
+
+		PuzzlePiece piece0 = puzzle.piece[0]; //East side is an internal spade, and the South side is an internal heart, 
+		PuzzlePiece piece1 = puzzle.piece[1]; //West side is an external heart (should not fit)
+		PuzzlePiece piece2 = puzzle.piece[4]; //North side is an external heart (should fit)
+		assertFalse(puzzle.checkPosition0(piece0, piece1, piece2));
+	}
+	
+	@Test
+	public void testCheckPosition0ForInvalidPieces3() {
+
+		PuzzlePiece piece0 = puzzle.piece[0]; //East side is an internal spade, and the South side is an internal heart, 
+		PuzzlePiece piece1 = puzzle.piece[1]; //West side is an external heart (should not fit)
+		PuzzlePiece piece2 = puzzle.piece[5]; //North side is an external club (should not fit)
+		assertFalse(puzzle.checkPosition0(piece0, piece1, piece2));
+	}
+	
+	@Test
+	public void testCheckPosition1ForValidPieces() {
+
+		PuzzlePiece piece0 = puzzle.piece[2]; //South side is an internal diamond
+		PuzzlePiece piece1 = puzzle.piece[0]; //North side is an external diamond (should fit)
+		assertTrue(puzzle.checkPosition1(piece0, piece1));
 	}
 
 	@Test
-	public void testCheckPosition2() {
+	public void testCheckPosition1ForInvalidPieces() {
 
-		fail("Not yet implemented");
+		PuzzlePiece piece0 = puzzle.piece[1]; //South side is an internal heart
+		PuzzlePiece piece1 = puzzle.piece[0]; //North side is an external diamond (should not fit)
+		assertFalse(puzzle.checkPosition1(piece0, piece1));
+	}
+	
+	@Test
+	public void testCheckPosition2ForValidPieces() {
+
+		PuzzlePiece piece0 = puzzle.piece[0]; //East side is an internal spade
+		PuzzlePiece piece1 = puzzle.piece[2]; //West side is an external spade (should fit)
+		assertTrue(puzzle.checkPosition2(piece0, piece1));
 	}
 
+	@Test
+	public void testCheckPosition2ForInvalidPieces() {
+
+		PuzzlePiece piece0 = puzzle.piece[0]; //East side is an internal spade
+		PuzzlePiece piece1 = puzzle.piece[1]; //West side is an external heart (should not fit)
+		assertFalse(puzzle.checkPosition2(piece0, piece1));
+	}
+	
 	@Test
 	public void testSolvePuzzle() {
 
-		fail("Not yet implemented");
+		String solution = "710538642";
+		String rowVariant = "000";
+		String colVariant = "001";
+		puzzle.adjustRowPuzzle(solution, rowVariant);
+		puzzle.adjustColPuzzle(solution, colVariant, rowVariant);
+		String solutionOutput = puzzle.solvePuzzle(solution);
+		assertTrue(solutionOutput.matches("111111111"));
 	}
 
 }

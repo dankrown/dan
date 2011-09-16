@@ -4,13 +4,13 @@ import java.util.List;
 
 
 
-public class ToughPuzzle5 {
+public class ToughPuzzle {
 
 	public PuzzlePiece[] piece;
 	private List<String> permutations = new ArrayList<String>();
 	private List<String> truthTable = new ArrayList<String>();
 	
-	public ToughPuzzle5() {
+	public ToughPuzzle() {
 		
 		piece = new PuzzlePiece[9];
 		piece[0] = new PuzzlePiece(0, 0, PuzzlePiece.EXT_DIAMOND, PuzzlePiece.IN_SPADE, PuzzlePiece.IN_HEART, PuzzlePiece.EXT_SPADE);
@@ -26,9 +26,10 @@ public class ToughPuzzle5 {
 		perm1(permutations, "012345678");
 		perm3(truthTable, this.piece.length);
 	}
+	
 	public static void main(String[] args) {
 
-		ToughPuzzle5 puzzle = new ToughPuzzle5();
+		ToughPuzzle puzzle = new ToughPuzzle();
     	System.out.println("Possible Permutations: \n");
     	Iterator<String> permutationIterations = puzzle.permutations.iterator();
     			
@@ -142,16 +143,16 @@ public class ToughPuzzle5 {
 	}
 	
 	/**
-	 * Checks validity of pieces to the right of piece0 (piece1) and below piece0 (piece2)
-	 * @param piece0
-	 * @param piece1
-	 * @param piece2
+	 * Checks validity of pieces to the right of pieceStartingPoint (pieceBesideStartingPiece) and below pieceStartingPoint (pieceBelowStartingPiece)
+	 * @param pieceStartingPoint
+	 * @param pieceBesideStartingPiece
+	 * @param pieceBelowStartingPiece
 	 * @return
 	 */
-	public boolean checkPosition0 (int pieceIndex0, int pieceIndex1, int pieceIndex2){
+	public boolean checkPosition0 (PuzzlePiece pieceStartingPoint, PuzzlePiece pieceBesideStartingPiece, PuzzlePiece pieceBelowStartingPiece){
 		
-    	if ((this.piece[pieceIndex0].getEastSide()%4)==this.piece[pieceIndex1].getWestSide()%4){
-    		if ((this.piece[pieceIndex0].getSouthSide()%4)==this.piece[pieceIndex2].getNorthSide()%4){
+    	if ((pieceStartingPoint.getEastSide()%4)==pieceBesideStartingPiece.getWestSide()%4){
+    		if ((pieceStartingPoint.getSouthSide()%4)==pieceBelowStartingPiece.getNorthSide()%4){
     			return true;
     		}
     	}
@@ -159,28 +160,28 @@ public class ToughPuzzle5 {
     }
     
     /**
-     * Checks the validity of the piece below piece0 (piece1)
-     * @param piece0
-     * @param piece1
+     * Checks the validity of the piece below pieceStartingPoint (pieceBelowStartingPiece)
+     * @param pieceStartingPoint
+     * @param pieceBelowStartingPiece
      * @return
      */
-    public boolean checkPosition1 (int pieceIndex0, int pieceIndex1) {
+    public boolean checkPosition1 (PuzzlePiece pieceStartingPoint, PuzzlePiece pieceBelowStartingPiece) {
     	
-    	if ((this.piece[pieceIndex0].getSouthSide()%4)==(this.piece[pieceIndex1].getNorthSide()%4)){
+    	if ((pieceStartingPoint.getSouthSide()%4)==(pieceBelowStartingPiece.getNorthSide()%4)){
     		return true;
     	}
     	return false;
     }
     
     /**
-     * Checks the validity of the piece to the right of piece0 (piece1)
-     * @param piece0
-     * @param piece1
+     * Checks the validity of the piece to the right of pieceStartingPoint (pieceBesideStartingPoint)
+     * @param pieceStartingPoint
+     * @param pieceBesideStartingPoint
      * @return
      */
-    public boolean checkPosition2 (int pieceIndex0, int pieceIndex1) {
+    public boolean checkPosition2 (PuzzlePiece pieceStartingPoint, PuzzlePiece pieceBesideStartingPoint) {
    
-    	if ((this.piece[pieceIndex0].getEastSide()%4)==(this.piece[pieceIndex1].getWestSide()%4)){
+    	if ((pieceStartingPoint.getEastSide()%4)==(pieceBesideStartingPoint.getWestSide()%4)){
     		return true;
     	}
     	return false;
@@ -194,13 +195,13 @@ public class ToughPuzzle5 {
     	for (int i=0;i<this.piece.length;i++){
 			if (i+3<this.piece.length){
 				if (i%3<2){
-					pieceFit[i]=checkPosition0(Character.getNumericValue(pieceIteration.charAt(i)), Character.getNumericValue(pieceIteration.charAt(i+1)), Character.getNumericValue(pieceIteration.charAt(i+3)));
+					pieceFit[i]=checkPosition0(this.piece[Character.getNumericValue(pieceIteration.charAt(i))], this.piece[Character.getNumericValue(pieceIteration.charAt(i+1))], this.piece[Character.getNumericValue(pieceIteration.charAt(i+3))]);
 				} else {
-					pieceFit[i]=checkPosition1(Character.getNumericValue(pieceIteration.charAt(i)), Character.getNumericValue(pieceIteration.charAt(i+3)));
+					pieceFit[i]=checkPosition1(this.piece[Character.getNumericValue(pieceIteration.charAt(i))], this.piece[Character.getNumericValue(pieceIteration.charAt(i+3))]);
 				}
 			}
 			else if (i%3<2) {
-				pieceFit[i] = checkPosition2(Character.getNumericValue(pieceIteration.charAt(i)), Character.getNumericValue(pieceIteration.charAt(i+1)));
+				pieceFit[i] = checkPosition2(this.piece[Character.getNumericValue(pieceIteration.charAt(i))], this.piece[Character.getNumericValue(pieceIteration.charAt(i+1))]);
 			}
 			else {
 				pieceFit[i] = true;
